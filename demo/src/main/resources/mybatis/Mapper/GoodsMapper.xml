@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jk.dao.GoodsMapper" >
+  <resultMap id="BaseResultMap" type="com.jk.model.Goods" >
+    <id column="goodsid" property="goodsid" jdbcType="INTEGER" />
+    <result column="goodsname" property="goodsname" jdbcType="VARCHAR" />
+    <result column="goodsprice" property="goodsprice" jdbcType="INTEGER" />
+    <result column="goodsdate" property="goodsdate" jdbcType="DATE" />
+    <result column="goodsimg" property="goodsimg" jdbcType="VARCHAR" />
+    <result column="attentionnumber" property="attentionnumber" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    goodsid, goodsname, goodsprice, goodsdate, goodsimg, attentionnumber
+  </sql>
+
+  <select id="queryall" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from t_goods where 1=1
+      <if test="goodsname != null and goodsname != ''">
+        and goodsname LIKE  '%${goodsname}%'
+      </if>
+      <if test="goodsdatemin != null and goodsdatemin != ''">
+      and goodsdate &gt; #{goodsdatemin}
+      </if>
+      <if test="goodsdatemax != null and goodsdatemax != ''">
+      and goodsdate $lt; #{goodsdatemax}
+      </if>
+  </select>
+
+
+</mapper>

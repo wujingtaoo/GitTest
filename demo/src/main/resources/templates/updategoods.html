@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form  id="formid">
+    <input type="hidden" name="goodsid" th:value="${shop.goodsid}" /><br>
+    <table>
+        <tr>
+            <td>商品名:</td>
+            <td><input type="text" name="goodsname" th:value="${shop.goodsname}" /></td>
+        </tr>
+        <tr>
+            <td>商品价格:</td>
+            <td><input type="number" name="goodsprice" th:value="${shop.goodsprice}" /></td>
+        </tr>
+        <tr>
+            <td>上线时间:</td>
+            <td><input type="text" name="goodsdate" th:value="${{shop.goodsdate}}" /></td>
+        </tr>
+        <tr>
+            <td>商品照片:</td>
+            <td><input type="text" name="goodsimg" th:value="${shop.goodsimg}" /></td>
+        </tr>
+        <tr>
+            <td>关注人数:</td>
+            <td><input type="number" name="attentionnumber" th:value="${shop.attentionnumber}" /></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input type="button" value="提交" onclick="querycost()" /></td>
+        </tr>
+    </table>
+</form>
+<script th:inlin="javascript" src="/jquery.min.js"></script>
+<script  th:inline="javascript">
+    function querycost(){
+        $.ajax({
+            type:"post",
+            url:"/goods/update",
+            data:$("#formid").serialize(),
+            success:function(){
+                location.href="/goods/queryall"
+            }
+        })
+    }
+</script>
+</body>
+</html>

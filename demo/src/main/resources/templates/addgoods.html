@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script th:src="@{/jquery.min.js}" src="../static/jquery.min.js"></script>
+</head>
+<body>
+商品图片:<img id="showimg" width="60px" height="80px"><br>
+<input type="file" id="proimg">
+<a th:onclick="'javascript:uploadphoto()'">确认使用</a>
+<br><br>
+<form id="addform">
+    商品名称:<input type="text" name="goodsname" ><br>
+    商品价格:<input type="text" name="goodsprice" ><br>
+    上架时间:<input type="text" name="goodsdate" ><br>
+    <input  id="tpath" type="hidden" name="goodsimg">
+    关注人数:<input type="number" name="attentionnumber" ><br>
+    <button type="button" th:onclick="'javascript:add()'">添加
+    </button>
+</form>
+<script>
+    function add(){
+          $.ajax({
+              type:"post",
+              url:"/goods/addgoods",
+              data:$("#addform").serialize(),
+              success:function(){
+                 alert("添加成功")
+                  location.href="/goods/queryall"
+              }
+          })
+    }
+
+    function uploadphoto(){
+        var formData = new FormData();
+        formData.append("userphoto", document.getElementById("proimg").files[0]);
+        $.ajax({
+            url: "/pro/uploadPhoto",
+            type: "POST",
+            data: formData,
+            /**
+             *必须false才会自动加上正确的Content-Type
+             */
+            contentType: false,
+            /**
+             * 必须false才会避开jQuery对 formdata 的默认处理
+             * XMLHttpRequest会对 formdata 进行正确的处理
+             */
+            processData: false,
+            success: function (data) {
+                alert(data)//图片地址
+//             1.显示图片------设置img标签的src属性为data------使用prop方法设置属性
+                $("#showimg").prop('src',data);
+//             2.将图片地址存储到form标签中的隐藏域中
+                $("#tpath").val(data);
+            }
+        });
+    }
+</script>
+</body>
+</html>

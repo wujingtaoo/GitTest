@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script th:src="@{/jquery.min.js}" src="../static/jquery.min.js"></script>
+</head>
+<body>
+<div id="showdiv">
+    <form id="souform">
+        商品名称:<input name="goodsname" ><br>
+        上架时间:<input type="date" name="goodsdatemin">-----<input type="date" name="goodsdatemax"><br>
+    </form>
+    <a  th:onclick="'sou()'">搜索</a>
+    <a  th:href="@{/goods/toadd}">新增</a>
+<table border="1">
+    <tr>
+        <th>商品编号</th>
+        <th>商品名称</th>
+        <th>商品价格</th>
+        <th>上架时间</th>
+        <th>图片展示</th>
+        <th>关注人数</th>
+        <th>操作</th>
+    </tr>
+    <tr   th:each="gg,iterStat : ${goods}">
+        <th scope="row" th:text="${gg.goodsid}"></th>
+        <th th:text="${gg.goodsname}"></th>
+        <th th:text="${gg.goodsprice}"></th>
+        <th th:text="${{gg.goodsdate}}"></th>
+        <td >
+            <img th:src="${gg.goodsimg}" width="50px" height="50px"/>
+        </td>
+        <th th:text="${gg.attentionnumber}"></th>
+        <th><a  th:href="@{/goods/querybyid(goodsid=${gg.goodsid})}">修改</a>
+            <a  th:onclick="'del('+${gg.goodsid}+')'">删除</a>
+        </th>
+    </tr>
+</table>
+</div>
+<script>
+    function del(id){
+        $.ajax({
+            type:"post",
+            url:"/goods/delbyid",
+            data:{
+                "id":id
+            },
+            success:function(){
+                alert("删除成功")
+                location.href="/goods/queryall"
+            }
+        })
+    }
+    function sou() {
+        $.ajax({
+            type:"post",
+            url:"/goods/queryall",
+            data: $("#souform").serialize() ,
+            success:function(data){
+                $("#showdiv").html(data)
+            }
+        })
+    }
+
+</script>
+</body>
+</html>
